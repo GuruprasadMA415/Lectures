@@ -1,0 +1,50 @@
+---
+title: "Data Frame Exercises"
+author: "Shripreetika Guruprasad"
+format: html
+editor: visual
+---
+
+## Exercise 1 
+
+```{r}
+
+df <- data.frame(
+  name = c("Alex", "Lilly", "Mark", "Oliver", "Martha", "Lucas", "Caroline"), 
+  age = c(25,31,23,52,76,49,26), 
+  height = c(177, 163, 190, 179, 163, 183, 164), 
+  weight = c(57, 69, 83, 75, 70, 83, 53),
+  sex = c("F", "F", "M", "M", "F", "M", "F")
+)
+
+df$sex <- ifelse(df$sex == "M", "F", "M")
+
+
+```
+
+## Exercise 2
+
+```{r}
+
+df_2 <- data.frame(name = c("Alex", "Lilly", "Mark", "Oliver", "Martha", "Lucas", "Caroline"), working = c("Yes", "No", "No", "Yes", "Yes", "No", "Yes"), stringsAsFactors = FALSE)
+
+df$working <- df_2$working 
+
+df
+```
+
+## Exercise 3
+
+```{r}
+
+df_state_center <- as.data.frame(state.center)
+head(df_state_center)
+```
+
+## Exercise 4 
+
+```{r}
+
+
+
+```

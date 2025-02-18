@@ -1,0 +1,132 @@
+---
+title: "Lecture 6"
+author: "Shripreetika Guruprasad"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+#| label: Extracting buoy data from 1984, station 44013
+
+
+file_root = "https://www.ndbc.noaa.gov/view_text_file.php?filename=44013h"
+tail <- ".txt.gz&dir=data/historical/stdmet/"
+load_buoy_data <- function(year){
+  path <- paste0(file_root, year, tail)
+  buoy <- read.table(path, fill = TRUE, header = TRUE, sep ="")
+  
+}
+buoy <- load_buoy_data("1984")
+
+head(buoy)
+
+nat <- which(is.na(buoy$ATMP))
+
+```
+
+```{r}
+   #| label: save data 
+
+airtemp <- buoy$ATMP
+saveRDS(airtemp, file = "airtemp.rdata")
+
+airtemp <- readRDS("airtemp.rdata")
+
+aa<- which(airtemp == 999) #the index numbers with 999
+
+airtemp <- airtemp [-aa] #the minus sign for aa means that those indicies will be dropped
+
+plot(airtemp, type = "l")
+
+```
+
+```{r}
+
+library(esquisse)
+esquisser()
+airtemp <- as.data.frame(airtemp)
+
+at <- cbind(1:3459. airtemp)
+```
+
+```{r}
+
+library(lubridate)
+buoy[10,]
+
+date <- buoy[10,1:4]
+date1 <- unlist(date)
+date1 <- as.character(date1)
+date1 <- paste0(date[1], "-", date1[2], "-", date1[3], "-", date1[4]) 
+date2 <- ymd_h(date1)
+```
+
+## Loading Data From all Years 
+
+```{r}
+
+file_root = "https://www.ndbc.noaa.gov/view_text_file.php?filename=44013h"
+tail <- ".txt.gz&dir=data/historical/stdmet/"
+load_buoy_data <- function(year){
+  path <- paste0(file_root, year, tail)
+  buoy <- read.table(path, fill = TRUE, header = TRUE, sep ="")
+  
+  if (year < 2007){
+    header <- scan(path, what = 'character', nlines =1)
+    buoy <- read.table(path, fill - TRUE, header = TRUE, sep = "")
+    buoy <- add_column(buoy, mm = NA, .after = "hh")
+    buoy <- add_column(byou, TIDE = NA, .after = "VIS")
+    
+  } 
+  else{ 
+    header <- scan(path, what = 'character', nlines = 1)
+    buoy <- fread(path, header = FALSE, skip = 1, fill = TRUE)
+    
+    setnames(buoy, header)}
+  #return(buoy)
+}
+
+
+
+  
+  all_data1 <- lapply(1985:2024, load_buoy_data)
+  
+  combined_data1 <- rblindlist(all_data, fill = TRUE)
+  
+  
+```
+
+```{r warning = FALSE}
+
+library(data.table)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(zoo)
+library(tibble)
+library(readr)
+
+
+
+```
